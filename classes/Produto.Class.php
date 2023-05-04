@@ -1,21 +1,42 @@
 <?php
-      class Produto{
+
+include_once("interfaces/crud.php");
+include_once("classes/DB.Class.php");
+
+      class Produto implements crud{
            private $id;
            private $categoria_id;
            private $nome;
            private $preco;
            private $quantidade;
 
-       public function setid($id){
+       public function __construct($id=false){
+           if($id){
+           $sql = "SELECT * FROM Produtos where id = ?";
+           $conexao = DB::conexao();
+           $stmt = $conexao->prepare($sql);
+           $stmt->bindParam(1,$id, PDO::PARAM_INT);
+           $stmt->execute();
+           foreach($stmt as $obj){
+             $this->setId($obj['id']);
+             $this->setCategoria_id($obj['categoria_id']);
+             $this->setNome($obj['nome']);
+             $this->setPreco($obj['preco']);
+             $this->setQuantidade($obj['quantidade']);
+             }
+           }
+      }
+
+       public function setId($id){
             $this->id=$id;
        }
-       public function getid(){
+       public function getId(){
             return $this->id;
        }
-       public function setcategoria_id($categoria_id){
+       public function setCategoria_id($categoria_id){
           $this->categoria_id=$categoria_id;
        }
-       public function getcategoria_id(){
+       public function getCategoria_id(){
             return $this->categoria_id;
        }
        public function setNome($nome){
@@ -36,11 +57,14 @@
        public function getQuantidade(){
             return $this->quantidade;
        }
-      public function__construct(){
-            echo "O objeto produto foi instanciado!";
-      }
       
-      }
+      
+      
+      public function adicionar(){}
+      public function listar(){}
+      public function atualizar(){}
+      public function excluir(){}
+     }
 
 
 ?>
