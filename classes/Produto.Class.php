@@ -60,8 +60,42 @@ include_once("classes/DB.Class.php");
       
       
       
-      public function adicionar(){}
-      public function listar(){}
+      public function adicionar(){
+        $sql = "INSERT INTO produtos (categoria_id, nome, preco, quantidade)
+                VALUES(?,?,?,?)";
+      try{
+          $conexao = DB::conexao();
+          $stmt = $conexao->prepare($sql);
+          $stmt->bindParam(1,$this->categoria_id);
+          $stmt->bindParam(2,$this->nome);
+          $stmt->bindParam(3,$this->preco);
+          $stmt->bindParam(4,$this->quantidade);
+          $stmt->execute();
+      }catch(PDOException $e){
+           echo "Erro na função adicionar produto".$e->getMessage();      
+          }     
+      }
+      public static function listar(){
+           $sql = "SELECT * FROM produtos";
+           $conexao = DB::conexao();
+           $stmt = $conexao->prepare($sql);
+           $stmt->execute();
+           $registros = $stmt->fetchAll(PDO::FETCH_ASSOC);
+           If ($registros){
+               $objetos = array();
+               foreach($registros as $registro){
+                  $temporario = new Produto();
+                  $temporario->setid($registro['id']);
+                  $temporario->setCategoria_id($registro['categoria_id']);
+                  $temporario->setNome($registro['nome']);
+                  $temporario->setPreco($registro['preco']);
+                  $temporario->setQuantidade($registro['quantidade']);
+                  $objetos[] = $temporario;
+               }
+               return $objetos;
+           }
+           return false;
+      }
       public function atualizar(){}
       public function excluir(){}
      }

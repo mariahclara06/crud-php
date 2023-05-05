@@ -36,7 +36,7 @@ include_once("classes/DB.Class.php");
 
        
       public function adicionar(){}
-      public function listar(){}
+      public static function listar(){}
       public function atualizar(){}
       public function excluir(){}
 
